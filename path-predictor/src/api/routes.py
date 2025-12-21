@@ -3,6 +3,7 @@ from typing import List, Dict, Any
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from sqlalchemy import text
 import numpy as np
+import json
 import csv
 import io
 
@@ -83,8 +84,8 @@ async def predict(req: PredictRequest):
         'student_id': record['student_id'],
         'course_id': record['course_id'],
         'severity': sev,
-        'risk_factors': io.StringIO(str(rf)).getvalue(),
-        'recommended_actions': io.StringIO(str(ra)).getvalue(),
+        'risk_factors': json.dumps(rf),
+        'recommended_actions': json.dumps(ra),
     }])
 
     return PredictResponse(
