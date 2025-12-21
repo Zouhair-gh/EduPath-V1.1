@@ -26,8 +26,17 @@ _explainer: Explainer | None = None
 
 @router.on_event("startup")
 async def startup_event():
-    ensure_schema()
-    setup_mlflow()
+    import threading
+    def init():
+        try:
+            ensure_schema()
+        except Exception as e:
+            print(f"[WARN] ensure_schema skipped: {e}")
+        try:
+            setup_mlflow()
+        except Exception as e:
+            print(f"[WARN] MLflow setup skipped: {e}")
+    threading.Thread(target=init, daemon=True).start()
 
 
 def _ensure_model():

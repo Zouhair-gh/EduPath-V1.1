@@ -10,7 +10,9 @@ app.include_router(api_router)
 
 @app.on_event("startup")
 async def startup():
-    ensure_schema()
+    # Run schema setup in background to avoid blocking startup
+    import threading
+    threading.Thread(target=ensure_schema, daemon=True).start()
 
 @app.get("/")
 async def root():

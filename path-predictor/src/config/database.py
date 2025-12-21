@@ -94,14 +94,22 @@ FEATURE_COLUMNS: List[str] = [
 def get_engine() -> Engine:
     global _engine
     if _engine is None:
-        _engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+        _engine = create_engine(
+            DATABASE_URL,
+            pool_pre_ping=True,
+            connect_args={"connect_timeout": 3}
+        )
     return _engine
 
 
 def ensure_schema() -> None:
-    engine = get_engine()
-    with engine.begin() as conn:
-        conn.execute(text(SCHEMA_SQL))
+    try:
+        engine = get_engine()
+        with engine.begin() as conn:
+            conn.execute(text(SCHEMA_SQL))
+    except Exception as e:
+        # Do not block app startup on DB availability; log and continue
+        print(f"[WARN] ensure_schema skipped: {e}")
 
 
 def fetch_features() -> List[Dict[str, Any]]:
