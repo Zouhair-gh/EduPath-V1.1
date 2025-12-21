@@ -1,0 +1,16 @@
+services:
+  path-predictor:
+    build: .
+    container_name: path-predictor
+    environment:
+      API_PORT: 8003
+      ANALYTICS_DB_HOST: host.docker.internal
+      ANALYTICS_DB_PORT: 5433
+      ANALYTICS_DB_NAME: analytics_db
+      ANALYTICS_DB_USER: postgres
+      ANALYTICS_DB_PASSWORD: postgres
+      MLFLOW_TRACKING_URI: http://host.docker.internal:5000
+      MLFLOW_EXPERIMENT_NAME: path_predictor
+    ports:
+      - "8003:8003"
+    restart: unless-stopped
