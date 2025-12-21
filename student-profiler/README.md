@@ -39,6 +39,28 @@ pip install -r requirements.txt
 uvicorn src.main:app --host 0.0.0.0 --port 8002 --reload
 ```
 
+### Docker
+Build et run via Docker:
+
+```bash
+cd student-profiler
+docker build -t student-profiler:latest .
+docker run --rm -p 8002:8002 \
+	-e ANALYTICS_DB_HOST=host.docker.internal \
+	-e ANALYTICS_DB_PORT=5433 \
+	-e ANALYTICS_DB_NAME=analytics_db \
+	-e ANALYTICS_DB_USER=postgres \
+	-e ANALYTICS_DB_PASSWORD=postgres \
+	student-profiler:latest
+```
+
+Ou avec Compose:
+
+```bash
+cd student-profiler
+docker compose up --build -d
+```
+
 ## Endpoints
 - GET `/api/profiles/student/{id}`: profil d’un étudiant
 - GET `/api/profiles/definitions`: liste des profils types

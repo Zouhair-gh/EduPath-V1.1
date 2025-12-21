@@ -1,0 +1,12 @@
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.tmp
+.env
+.env.*
+.ipynb_checkpoints
+models/*.pkl
+models/*.meta.json

@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  student-profiler:
+    build: .
+    container_name: student-profiler
+    environment:
+      API_PORT: 8002
+      MODEL_VERSION: v1.0
+      N_CLUSTERS: 5
+      PCA_COMPONENTS: 2
+      # Connect to PrepaData analytics DB running on host at 5433
+      ANALYTICS_DB_HOST: host.docker.internal
+      ANALYTICS_DB_PORT: 5433
+      ANALYTICS_DB_NAME: analytics_db
+      ANALYTICS_DB_USER: postgres
+      ANALYTICS_DB_PASSWORD: postgres
+    ports:
+      - "8002:8002"
+    restart: unless-stopped

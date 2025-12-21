@@ -12,6 +12,16 @@ app.include_router(profiles_router)
 async def startup():
     ensure_schema()
 
+@app.get("/")
+async def root():
+    return {
+        "status": "ok",
+        "service": "StudentProfiler",
+        "health": "/health",
+        "docs": "/docs",
+        "base": "/api/profiles"
+    }
+
 @app.get("/health")
 async def health():
     return {"status": "ok", "service": "StudentProfiler"}

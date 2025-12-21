@@ -9,7 +9,12 @@ DB_NAME = os.getenv("ANALYTICS_DB_NAME", "analytics_db")
 DB_USER = os.getenv("ANALYTICS_DB_USER", "postgres")
 DB_PASSWORD = os.getenv("ANALYTICS_DB_PASSWORD", "password")
 
-DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+# Allow override via full DSN if provided
+DATABASE_URL = (
+    os.getenv("ANALYTICS_DATABASE_URL")
+    or os.getenv("DATABASE_URL")
+    or f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+)
 
 _engine: Engine | None = None
 
