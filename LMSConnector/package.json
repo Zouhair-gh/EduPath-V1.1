@@ -1,0 +1,41 @@
+{
+  "name": "lmsconnector",
+  "version": "0.1.0",
+  "description": "Microservice LMSConnector: ingestion et normalisation depuis Moodle/Canvas/Blackboard vers PostgreSQL",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "migrate": "node src/db/migrate.js",
+    "test": "jest --passWithNoTests",
+    "lint": "echo 'no lint configured'"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "axios": "^1.7.5",
+    "axios-retry": "^3.9.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "node-cron": "^3.0.3",
+    "opossum": "^6.0.0",
+    "pg": "^8.13.1",
+    "pino": "^9.4.0",
+    "swagger-ui-express": "^5.0.0",
+    "yaml": "^2.5.1",
+    "express-validator": "^7.0.1",
+    "@opentelemetry/sdk-node": "^0.52.1",
+    "@opentelemetry/auto-instrumentations-node": "^0.52.1",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.52.1",
+    "@opentelemetry/resources": "^1.26.0",
+    "@opentelemetry/semantic-conventions": "^1.26.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "nock": "^13.5.5",
+    "cross-env": "^7.0.3"
+  }
+}

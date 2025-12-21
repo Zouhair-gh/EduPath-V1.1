@@ -1,0 +1,22 @@
+# Global
+.DS_Store
+Thumbs.db
+*.log
+
+# Node
+LMSConnector/node_modules/
+LMSConnector/.env
+LMSConnector/.next/
+LMSConnector/dist/
+
+# Python
+prepa-data/.venv/
+prepa-data/__pycache__/
+prepa-data/.pytest_cache/
+prepa-data/.env
+
+# Docker/Compose
+prepa-data/pgdata/
+
+# VS Code
+.vscode/
