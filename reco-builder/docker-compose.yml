@@ -1,0 +1,20 @@
+services:
+  reco-builder:
+    build: .
+    container_name: reco-builder
+    environment:
+      API_PORT: 8004
+      ANALYTICS_DB_HOST: host.docker.internal
+      ANALYTICS_DB_PORT: 5433
+      ANALYTICS_DB_NAME: postgres
+      ANALYTICS_DB_USER: postgres
+      ANALYTICS_DB_PASSWORD: postgres
+      EMBEDDING_MODEL: all-MiniLM-L6-v2
+      MINIO_ENDPOINT: host.docker.internal:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_BUCKET: educational-resources
+      MINIO_SECURE: "False"
+    ports:
+      - "8004:8004"
+    restart: unless-stopped
