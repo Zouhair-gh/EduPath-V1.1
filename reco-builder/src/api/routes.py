@@ -76,8 +76,12 @@ async def reindex_resources():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Embedding failed: {e}")
 
+    db_errors = 0
     for rid, emb in zip(ids, embeddings):
-        upsert_embedding(rid, emb.tolist(), EMBEDDING_MODEL)
+        try:
+            upsert_embedding(rid, emb.tolist(), EMBEDDING_MODEL)
+        except Exception as e:
+            db_errors += 1
 
     try:
         build_index(embeddings, np.array(ids, dtype=np.int64))
@@ -85,7 +89,7 @@ async def reindex_resources():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"FAISS index build failed: {e}")
 
-    return {"indexed": len(ids)}
+    return {"indexed": len(ids), "db_upserts_failed": db_errors}
 
 
 @router.get("/recommendations/student/{student_id}", response_model=RecommendationsResponse)

@@ -14,6 +14,20 @@ prepa-data/.venv/
 prepa-data/__pycache__/
 prepa-data/.pytest_cache/
 prepa-data/.env
+**/__pycache__/
+**/*.pyc
+**/.venv/
+
+# Teacher Console
+teacher-console/**/node_modules/
+teacher-console/backend/.env
+teacher-console/frontend/.env
+
+# Other services env/node
+path-predictor/.venv/
+student-profiler/.venv/
+reco-builder/__pycache__/
+reco-builder/.venv/
 
 # Docker/Compose
 prepa-data/pgdata/
