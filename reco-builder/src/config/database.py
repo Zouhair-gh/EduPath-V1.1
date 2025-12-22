@@ -16,9 +16,7 @@ DATABASE_URL = (
 
 _engine: Engine | None = None
 
-SCHEMA_SQL = """
-CREATE EXTENSION IF NOT EXISTS vector;
-
+SCHEMA_RESOURCES_SQL = """
 CREATE TABLE IF NOT EXISTS resources (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255),
@@ -32,7 +30,9 @@ CREATE TABLE IF NOT EXISTS resources (
     tags JSONB,
     created_at TIMESTAMP DEFAULT NOW()
 );
+"""
 
+SCHEMA_EMBEDDINGS_SQL = """
 CREATE TABLE IF NOT EXISTS resource_embeddings (
     id SERIAL PRIMARY KEY,
     resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
@@ -40,7 +40,9 @@ CREATE TABLE IF NOT EXISTS resource_embeddings (
     embedding vector(384),
     created_at TIMESTAMP DEFAULT NOW()
 );
+"""
 
+SCHEMA_RECO_SQL = """
 CREATE TABLE IF NOT EXISTS recommendations (
     id SERIAL PRIMARY KEY,
     student_id INTEGER,
@@ -58,8 +60,6 @@ CREATE TABLE IF NOT EXISTS recommendation_feedback (
     time_spent_seconds INTEGER,
     feedback_at TIMESTAMP DEFAULT NOW()
 );
-
-CREATE INDEX IF NOT EXISTS resource_embeddings_ivfflat ON resource_embeddings USING ivfflat (embedding vector_cosine_ops);
 """
 
 
@@ -75,12 +75,27 @@ def get_engine() -> Engine:
 
 
 def ensure_schema() -> None:
+    engine = get_engine()
+    # Attempt to enable pgvector extension, but don't block
     try:
-        engine = get_engine()
         with engine.begin() as conn:
-            conn.execute(text(SCHEMA_SQL))
+            conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector;"))
     except Exception as e:
-        print(f"[WARN] ensure_schema skipped: {e}")
+        print(f"[WARN] pgvector not available: {e}")
+    # Create core tables regardless
+    try:
+        with engine.begin() as conn:
+            conn.execute(text(SCHEMA_RESOURCES_SQL))
+            conn.execute(text(SCHEMA_RECO_SQL))
+    except Exception as e:
+        print(f"[WARN] core tables creation issue: {e}")
+    # Create embeddings table and index if pgvector exists
+    try:
+        with engine.begin() as conn:
+            conn.execute(text(SCHEMA_EMBEDDINGS_SQL))
+            conn.execute(text("CREATE INDEX IF NOT EXISTS resource_embeddings_ivfflat ON resource_embeddings USING ivfflat (embedding vector_cosine_ops);"))
+    except Exception as e:
+        print(f"[WARN] embeddings table/index skipped: {e}")
 
 
 def fetch_resources() -> List[Dict[str, Any]]:
@@ -102,15 +117,18 @@ def fetch_embeddings() -> List[Dict[str, Any]]:
 
 
 def upsert_embedding(resource_id: int, embedding: List[float], model: str) -> None:
-    engine = get_engine()
-    with engine.begin() as conn:
-        conn.execute(text(
-            """
-            INSERT INTO resource_embeddings (resource_id, embedding_model, embedding)
-            VALUES (:rid, :model, :embedding)
-            ON CONFLICT (resource_id) DO UPDATE SET embedding = EXCLUDED.embedding, embedding_model = EXCLUDED.embedding_model
-            """
-        ), {"rid": resource_id, "model": model, "embedding": embedding})
+    try:
+        engine = get_engine()
+        with engine.begin() as conn:
+            conn.execute(text(
+                """
+                INSERT INTO resource_embeddings (resource_id, embedding_model, embedding)
+                VALUES (:rid, :model, :embedding)
+                ON CONFLICT (resource_id) DO UPDATE SET embedding = EXCLUDED.embedding, embedding_model = EXCLUDED.embedding_model
+                """
+            ), {"rid": resource_id, "model": model, "embedding": embedding})
+    except Exception as e:
+        print(f"[WARN] upsert_embedding skipped for resource {resource_id}: {e}")
 
 
 def log_recommendations(student_id: int, recos: List[Dict[str, Any]], context: Dict[str, Any]) -> None:
