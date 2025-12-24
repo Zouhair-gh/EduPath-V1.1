@@ -1,0 +1,28 @@
+name: student_coach
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter: { sdk: flutter }
+  flutter_riverpod: ^2.5.1
+  dio: ^5.7.0
+  fl_chart: ^0.68.0
+  flutter_local_notifications: ^17.2.1
+  timezone: ^0.9.2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  flutter_secure_storage: ^9.2.2
+  url_launcher: ^6.3.0
+
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.2
+
+flutter:
+  uses-material-design: true

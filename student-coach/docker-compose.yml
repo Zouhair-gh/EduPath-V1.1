@@ -1,0 +1,40 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:15
+    container_name: student_coach_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: student_coach_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - student_coach_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: ./backend
+    container_name: student_coach_api
+    environment:
+      # Point to the Postgres service within the Docker network
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/student_coach_db
+      JWT_SECRET: dev-secret
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    ports:
+      - "8091:8091"
+    # Uncomment the following for live-reload style development via mounted code (requires additional setup)
+    # volumes:
+    #   - ./backend/app:/app/app
+    #   - ./backend/.env:/app/.env
+
+volumes:
+  student_coach_pgdata:
