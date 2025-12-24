@@ -60,6 +60,7 @@ async def _startup():
     # Dev seed: ensure a default user exists for quick login
     db = SessionLocal()
     try:
+        # --- Seed main test user ---
         email = "student@example.com"
         user = db.query(User).filter(User.email == email).first()
         if not user:
@@ -70,7 +71,6 @@ async def _startup():
             )
             db.add(user)
             db.commit()
-        # Seed student and link to user
         student = db.query(Student).filter(Student.email == email).first()
         if not student:
             student = Student(name="John Doe", email=email)
@@ -78,6 +78,26 @@ async def _startup():
             db.commit()
         if not user.student_id:
             user.student_id = student.id
+            db.commit()
+
+        # --- Seed a second test user ---
+        email2 = "student2@example.com"
+        user2 = db.query(User).filter(User.email == email2).first()
+        if not user2:
+            user2 = User(
+                email=email2,
+                password_hash=get_password_hash("password123"),
+                is_active=True,
+            )
+            db.add(user2)
+            db.commit()
+        student2 = db.query(Student).filter(Student.email == email2).first()
+        if not student2:
+            student2 = Student(name="Jane Smith", email=email2)
+            db.add(student2)
+            db.commit()
+        if not user2.student_id:
+            user2.student_id = student2.id
             db.commit()
         # Seed profile
         profile = db.query(StudentProfile).filter(StudentProfile.student_id == student.id).first()
@@ -106,39 +126,77 @@ async def _startup():
             r = Recommendation(student_id=student.id, title="Vidéo: Algèbre pour débutants", description="Une introduction rapide à l'algèbre", url="https://example.com/algebre", kind="video")
             db.add(r)
             db.commit()
-        # Seed a demo course, lessons, and quiz
+        # Seed two demo courses, each with lessons/quizzes, and assign enrollments per user
         import json
-        course = db.query(Course).first()
-        if not course:
-            course = Course(title="Maths 101", description="Bases d'algèbre et arithmétique", teacher_name="Mme. Dupont")
-            db.add(course)
+        course1 = db.query(Course).filter(Course.title == "Maths 101").first()
+        if not course1:
+            course1 = Course(title="Maths 101", description="Bases d'algèbre et arithmétique", teacher_name="Mme. Dupont")
+            db.add(course1)
             db.commit()
-            lessons = [
-                Lesson(course_id=course.id, title="Introduction", content_url="https://example.com/intro", order_index=1),
-                Lesson(course_id=course.id, title="Addition et Soustraction", content_url="https://example.com/add-sub", order_index=2),
-                Lesson(course_id=course.id, title="Multiplication et Division", content_url="https://example.com/mul-div", order_index=3),
+            lessons1 = [
+                Lesson(course_id=course1.id, title="Introduction", content_url="https://edureachlearn.com/wp-content/uploads/2025/02/230125-Sec-Math-Hcf-And-Lcm-.mp4", order_index=1),
+                Lesson(course_id=course1.id, title="Addition et Soustraction", content_url="https://edureachlearn.com/wp-content/uploads/2025/02/230125-Sec-Math-Arranging-Numbers-And-Number-Line-.mp4", order_index=2),
+                Lesson(course_id=course1.id, title="Multiplication et Division", content_url="https://edureachlearn.com/wp-content/uploads/2025/02/060225-Sec-Math-Expansion-Of-Algebraic-Expression.mp4", order_index=3),
             ]
-            db.add_all(lessons)
+            db.add_all(lessons1)
             db.commit()
-            # For each lesson, create a quiz with 10 questions and link via LessonQuiz
-            for l in lessons:
-                quiz = Quiz(course_id=course.id, title=f"Quiz {l.title}", description=f"Quiz pour {l.title}", pass_threshold=60)
+            for l in lessons1:
+                quiz = Quiz(course_id=course1.id, title=f"Quiz {l.title}", description=f"Quiz pour {l.title}", pass_threshold=60)
                 db.add(quiz)
                 db.commit()
-                # 10 simple questions
                 qs = []
                 for i in range(10):
                     prompt = f"Q{i+1}: 1 + 1 = ?"
                     options = json.dumps(["1","2","3","4"])
                     qs.append(QuizQuestion(quiz_id=quiz.id, prompt=prompt, options_json=options, correct_index=1, points=1))
+                for i in range(10, 20):
+                    prompt = f"Q{i+1}: 2 x {i-8} = ?"
+                    answer = (2 * (i-8))
+                    options = json.dumps([str(answer-1), str(answer), str(answer+1), str(answer+2)])
+                    qs.append(QuizQuestion(quiz_id=quiz.id, prompt=prompt, options_json=options, correct_index=1, points=1))
                 db.add_all(qs)
                 db.commit()
                 db.add(LessonQuiz(lesson_id=l.id, quiz_id=quiz.id))
                 db.commit()
-            # Unlock first lesson for the student
+            # Enroll only student@example.com in course1
             if student:
-                first = lessons[0]
-                db.add(StudentLessonProgress(student_id=student.id, course_id=course.id, lesson_id=first.id, is_unlocked=1, quiz_passed=0))
+                db.add(StudentLessonProgress(student_id=student.id, course_id=course1.id, lesson_id=lessons1[0].id, is_unlocked=1, quiz_passed=0))
+                db.add(Enrollment(student_id=student.id, course_id=course1.id))
+                db.commit()
+
+        course2 = db.query(Course).filter(Course.title == "Physique 101").first()
+        if not course2:
+            course2 = Course(title="Physique 101", description="Bases de la mécanique et optique", teacher_name="M. Martin")
+            db.add(course2)
+            db.commit()
+            lessons2 = [
+                Lesson(course_id=course2.id, title="Mécanique", content_url="https://edureachlearn.com/wp-content/uploads/2025/02/060225-Sec-Math-Solving-Simultaneous-Linear-Equation.mp4", order_index=1),
+                Lesson(course_id=course2.id, title="Optique", content_url="https://edureachlearn.com/wp-content/uploads/2025/02/230125-Sec-Math-Arranging-Numbers-And-Number-Line-.mp4", order_index=2),
+            ]
+            db.add_all(lessons2)
+            db.commit()
+            for l in lessons2:
+                quiz = Quiz(course_id=course2.id, title=f"Quiz {l.title}", description=f"Quiz pour {l.title}", pass_threshold=60)
+                db.add(quiz)
+                db.commit()
+                qs = []
+                for i in range(10):
+                    prompt = f"Q{i+1}: 2 + 2 = ?"
+                    options = json.dumps(["2","3","4","5"])
+                    qs.append(QuizQuestion(quiz_id=quiz.id, prompt=prompt, options_json=options, correct_index=2, points=1))
+                for i in range(10, 20):
+                    prompt = f"Q{i+1}: 3 x {i-8} = ?"
+                    answer = (3 * (i-8))
+                    options = json.dumps([str(answer-2), str(answer-1), str(answer), str(answer+1)])
+                    qs.append(QuizQuestion(quiz_id=quiz.id, prompt=prompt, options_json=options, correct_index=2, points=1))
+                db.add_all(qs)
+                db.commit()
+                db.add(LessonQuiz(lesson_id=l.id, quiz_id=quiz.id))
+                db.commit()
+            # Enroll only student2@example.com in course2
+            if student2:
+                db.add(StudentLessonProgress(student_id=student2.id, course_id=course2.id, lesson_id=lessons2[0].id, is_unlocked=1, quiz_passed=0))
+                db.add(Enrollment(student_id=student2.id, course_id=course2.id))
                 db.commit()
     finally:
         db.close()

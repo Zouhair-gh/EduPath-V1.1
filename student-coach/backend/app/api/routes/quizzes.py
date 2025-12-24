@@ -47,8 +47,8 @@ async def submit_quiz(quiz_id: int, payload: QuizSubmit, db: Session = Depends(g
     if not student:
         return {"ok": False, "error": "student_not_found"}
     qs_list = db.query(QuizQuestion).filter(QuizQuestion.quiz_id == quiz.id).all()
-    if len(qs_list) != 10:
-        return {"ok": False, "error": "quiz_incomplete", "message": "Quiz must have exactly 10 questions"}
+    if len(qs_list) < 10:
+        return {"ok": False, "error": "quiz_incomplete", "message": "Quiz must have at least 10 questions"}
     questions = {q.id: q for q in qs_list}
     total_points = sum(q.points for q in questions.values())
     score = 0
