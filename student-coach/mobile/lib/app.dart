@@ -8,6 +8,7 @@ import 'features/notifications/presentation/screens/notifications_screen.dart';
 import 'features/goals/presentation/screens/goals_screen.dart';
 import 'features/recommendations/presentation/screens/recommendations_screen.dart';
 import 'features/profile/presentation/screens/profile_screen.dart';
+import 'features/courses/presentation/screens/courses_screen.dart';
 
 class StudentCoachApp extends ConsumerWidget {
   const StudentCoachApp({super.key});
@@ -25,6 +26,7 @@ class StudentCoachApp extends ConsumerWidget {
         '/goals': (_) => const GoalsScreen(),
         '/recommendations': (_) => const RecommendationsScreen(),
         '/profile': (_) => const ProfileScreen(),
+        '/courses': (_) => const CoursesScreen(),
       },
     );
   }

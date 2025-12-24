@@ -37,7 +37,7 @@ class RecommendationsScreen extends ConsumerWidget {
                     tooltip: 'J\'aime',
                     onPressed: () async {
                       try {
-                        await ref.read(apiServiceProvider).post('/student/interactions', data: { 'type': 'like_recommendation', 'metadata': { 'recommendation_id': r['id'] } });
+                        await ref.read(apiServiceProvider).post('/student/interactions', data: { 'type': 'like_recommendation', 'details': { 'recommendation_id': r['id'] } });
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Merci pour votre avis !')));
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: $e')));
@@ -52,7 +52,7 @@ class RecommendationsScreen extends ConsumerWidget {
                 final url = r['url'] as String?;
                 if (url != null && url.isNotEmpty) {
                   try {
-                    await ref.read(apiServiceProvider).post('/student/interactions', data: { 'type': 'view_content', 'metadata': { 'recommendation_id': r['id'] } });
+                    await ref.read(apiServiceProvider).post('/student/interactions', data: { 'type': 'view_content', 'details': { 'recommendation_id': r['id'] } });
                   } catch (_) {}
                   final uri = Uri.parse(url);
                   if (await canLaunchUrl(uri)) {

@@ -13,7 +13,7 @@ router = APIRouter(prefix="/student", tags=["Interactions"])
 class InteractionCreate(BaseModel):
     type: str
     value: Optional[int] = None
-    metadata: Optional[Dict[str, object]] = None
+    details: Optional[Dict[str, object]] = None
 
     class Config:
         from_attributes = True
@@ -27,7 +27,7 @@ async def create_interaction(payload: InteractionCreate, db: Session = Depends(g
         student_id=student.id,
         event_type=payload.type,
         value=payload.value,
-        metadata=payload.metadata,
+        details=payload.details,
     )
     db.add(ev)
     db.commit()

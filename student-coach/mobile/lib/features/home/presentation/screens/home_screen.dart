@@ -15,6 +15,53 @@ class HomeScreen extends ConsumerWidget {
     final dash = ref.watch(dashboardProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Tableau de bord')),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const DrawerHeader(child: Text('StudentCoach')),
+            ListTile(
+              leading: const Icon(Icons.book),
+              title: const Text('Cours'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/courses');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.notifications),
+              title: const Text('Notifications'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/notifications');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.flag),
+              title: const Text('Objectifs'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/goals');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.thumb_up),
+              title: const Text('Recommandations'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/recommendations');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Profil'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/profile');
+              },
+            ),
+          ],
+        ),
+      ),
       body: dash.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Erreur: $e')),
@@ -24,6 +71,14 @@ class HomeScreen extends ConsumerWidget {
             MetricCard(title: 'Engagement', value: d.engagement.toString()),
             const SizedBox(height: 8),
             MetricCard(title: 'Réussite', value: d.success.toString()),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(child: MetricCard(title: 'Quiz Moy. (5)', value: '${d.quizLast5Avg}%')),
+                const SizedBox(width: 8),
+                Expanded(child: MetricCard(title: 'Quiz Pass (30j)', value: '${d.quizPassRate30d}%')),
+              ],
+            ),
             const SizedBox(height: 8),
             Row(
               children: [

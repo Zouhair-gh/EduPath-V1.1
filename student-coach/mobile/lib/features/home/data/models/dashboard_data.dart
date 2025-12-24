@@ -5,6 +5,8 @@ class DashboardData {
   final String message;
   final int streakDays;
   final List<int> studyWeekly;
+  final int quizLast5Avg;
+  final int quizPassRate30d;
 
   DashboardData({
     required this.engagement,
@@ -13,5 +15,7 @@ class DashboardData {
     required this.message,
     required this.streakDays,
     required this.studyWeekly,
+    required this.quizLast5Avg,
+    required this.quizPassRate30d,
   });
 }

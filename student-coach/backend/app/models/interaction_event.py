@@ -8,5 +8,5 @@ class InteractionEvent(Base):
     student_id = Column(Integer, ForeignKey('students.id', ondelete='CASCADE'), index=True, nullable=False)
     event_type = Column(String(50), index=True, nullable=False)
     value = Column(Integer, nullable=True)
-    metadata = Column(JSON, nullable=True)
+    details = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)

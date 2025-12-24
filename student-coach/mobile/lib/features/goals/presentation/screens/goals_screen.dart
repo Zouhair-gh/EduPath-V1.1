@@ -55,7 +55,7 @@ class GoalsScreen extends ConsumerWidget {
                         if (ok) {
                           try {
                             await ref.read(apiServiceProvider).patch('/goals/${g['id']}', data: { 'status': 'COMPLETED' });
-                            await ref.read(apiServiceProvider).post('/student/interactions', data: { 'type': 'complete_goal', 'metadata': { 'goal_id': g['id'] } });
+                            await ref.read(apiServiceProvider).post('/student/interactions', data: { 'type': 'complete_goal', 'details': { 'goal_id': g['id'] } });
                             ref.invalidate(goalsProvider);
                             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Objectif terminé !')));
                           } catch (e) {
@@ -92,7 +92,7 @@ class GoalsScreen extends ConsumerWidget {
                     onPressed: () async {
                       try {
                         await ref.read(apiServiceProvider).patch('/goals/${g['id']}', data: { 'status': 'COMPLETED' });
-                        await ref.read(apiServiceProvider).post('/student/interactions', data: { 'type': 'complete_goal', 'metadata': { 'goal_id': g['id'] } });
+                        await ref.read(apiServiceProvider).post('/student/interactions', data: { 'type': 'complete_goal', 'details': { 'goal_id': g['id'] } });
                         ref.invalidate(goalsProvider);
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Objectif terminé !')));
                       } catch (e) {

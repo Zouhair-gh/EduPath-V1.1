@@ -1,36 +1,43 @@
-# Global
+# OS
 .DS_Store
 Thumbs.db
-*.log
 
-# Node
-LMSConnector/node_modules/
-LMSConnector/.env
-LMSConnector/.next/
-LMSConnector/dist/
+# VS Code / IDE
+.vscode/
+.idea/
+*.iml
 
 # Python
-prepa-data/.venv/
-prepa-data/__pycache__/
-prepa-data/.pytest_cache/
-prepa-data/.env
-**/__pycache__/
-**/*.pyc
-**/.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+.env
+.venv/
+venv/
+env/
 
-# Teacher Console
-teacher-console/**/node_modules/
-teacher-console/backend/.env
-teacher-console/frontend/.env
+# Node / JS
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+dist/
+build/
 
-# Other services env/node
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+android/.gradle/
+android/app/build/
+ios/Pods/
+
+# Teacher Console frontend
+teacher-console/frontend/node_modules/
+teacher-console/frontend/dist/
+teacher-console/frontend/.vite/
+
+# Project-specific heavy directories
 path-predictor/.venv/
-student-profiler/.venv/
-reco-builder/__pycache__/
-reco-builder/.venv/
-
-# Docker/Compose
-prepa-data/pgdata/
-
-# VS Code
-.vscode/

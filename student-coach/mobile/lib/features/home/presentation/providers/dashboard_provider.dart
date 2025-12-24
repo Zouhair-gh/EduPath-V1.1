@@ -17,6 +17,8 @@ final dashboardProvider = FutureProvider<DashboardData>((ref) async {
       message: data['motivationalMessage'] as String? ?? '',
       streakDays: data['streakDays'] as int? ?? 0,
       studyWeekly: (data['studyWeekly'] as List?)?.map((e) => (e as num).toInt()).toList() ?? const [],
+      quizLast5Avg: (data['quizPerformance']?['last5AvgPercent'] as int?) ?? 0,
+      quizPassRate30d: (data['quizPerformance']?['passRate30d'] as int?) ?? 0,
     );
   } catch (_) {
     final data = cache.getJson('dashboard');
@@ -28,6 +30,8 @@ final dashboardProvider = FutureProvider<DashboardData>((ref) async {
         message: data['motivationalMessage'] as String? ?? '',
         streakDays: data['streakDays'] as int? ?? 0,
         studyWeekly: (data['studyWeekly'] as List?)?.map((e) => (e as num).toInt()).toList() ?? const [],
+        quizLast5Avg: (data['quizPerformance']?['last5AvgPercent'] as int?) ?? 0,
+        quizPassRate30d: (data['quizPerformance']?['passRate30d'] as int?) ?? 0,
       );
     }
     rethrow;

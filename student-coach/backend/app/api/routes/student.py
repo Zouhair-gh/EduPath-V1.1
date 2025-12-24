@@ -7,6 +7,8 @@ from app.models.interaction_event import InteractionEvent
 from app.models.goal import Goal
 from app.models.achievement import Achievement
 from app.models.recommendation import Recommendation
+from app.models.quiz_attempt import QuizAttempt
+from app.models.quiz import Quiz
 
 router = APIRouter(prefix="/student", tags=["Student"])
 
@@ -85,6 +87,28 @@ async def dashboard(db: Session = Depends(get_db), user=Depends(get_current_user
                     break
             else:
                 break
+    # Quiz performance metrics
+    last5_avg = 0
+    pass_rate_30d = 0
+    if student:
+        from datetime import datetime, timedelta
+        attempts = db.query(QuizAttempt).filter(QuizAttempt.student_id == student.id).order_by(QuizAttempt.completed_at.desc()).limit(50).all()
+        last5 = [a for a in attempts[:5] if a.total_points > 0]
+        if last5:
+            last5_avg = int(sum(int((a.score / a.total_points) * 100) for a in last5) / len(last5))
+        cutoff30 = datetime.utcnow() + timedelta(days=-30)
+        recent = [a for a in attempts if a.completed_at and a.completed_at >= cutoff30 and a.total_points > 0]
+        if recent:
+            passed_count = 0
+            for a in recent:
+                percent = int((a.score / a.total_points) * 100)
+                # use quiz pass_threshold
+                quiz = db.query(Quiz).get(a.quiz_id)
+                thresh = quiz.pass_threshold if quiz else 50
+                if percent >= thresh:
+                    passed_count += 1
+            pass_rate_30d = int(100 * (passed_count / len(recent)))
+
     trajectory = [
         {"x": i, "y": v} for i, v in enumerate(study_weekly if study_weekly else [10, 0, 15, 20, 5, 12, 18])
     ]
@@ -124,4 +148,8 @@ async def dashboard(db: Session = Depends(get_db), user=Depends(get_current_user
             for a in achievements
         ],
         "motivationalMessage": f"Continue, tu es sur la bonne voie ! ({profile_label})",
+        "quizPerformance": {
+            "last5AvgPercent": last5_avg,
+            "passRate30d": pass_rate_30d,
+        },
     }
