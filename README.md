@@ -89,10 +89,10 @@ La plateforme s’appuie sur des processus métier orchestrés via BPMN pour gar
 ### 8. AirFlow (prépa-data)
 - Orchestration des workflows de données
 - **Captures d’écran :**
-	- ![AirFlow – Dashboard](<img width="954" height="486" alt="Service2_AirFlow_Dashboard" src="https://github.com/user-attachments/assets/c26fd90e-a62f-4372-b79a-923c37a0b8b1" />
-)
-	- ![AirFlow – Login](<img width="960" height="413" alt="Service2_AirFlow_Login" src="https://github.com/user-attachments/assets/9cf50af1-ca01-45fa-ac9e-744cdf7fdba9" />
-)
+	- <img width="954" height="486" alt="Service2_AirFlow_Dashboard" src="https://github.com/user-attachments/assets/746076f2-1534-42ca-a9ca-30c4b173ca07" />
+
+	- <img width="960" height="413" alt="Service2_AirFlow_Login" src="https://github.com/user-attachments/assets/dbca7ee7-f831-4d60-bd6e-b7f740f9f1d2" />
+
 
 ---
 
