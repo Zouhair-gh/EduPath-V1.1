@@ -11,7 +11,8 @@ EduPath est une plateforme d’apprentissage intelligente, modulaire et évoluti
 
 L’architecture d’EduPath repose sur plusieurs microservices indépendants, chacun responsable d’un domaine fonctionnel précis. Cette approche permet une grande flexibilité, une scalabilité horizontale et une maintenance facilitée.
 
-![Architecture Microservices](../EDU/ArchitectureMicroService.PNG)
+<img width="596" height="361" alt="ArchitectureMicroService" src="https://github.com/user-attachments/assets/2ba06fff-75d8-43a0-9484-6e3b4d302388" />
+
 
 ### Microservices Principaux
 
@@ -29,7 +30,8 @@ L’architecture d’EduPath repose sur plusieurs microservices indépendants, c
 
 La plateforme s’appuie sur des processus métier orchestrés via BPMN pour garantir la cohérence et l’automatisation des flux entre microservices.
 
-![BPMN Application](../EDU/BPMN Application complete_page-0001.jpg)
+![BPMN Application complete_page-0001](https://github.com/user-attachments/assets/7b33f2f2-e01b-4716-891d-d99259c91469)
+
 
 ---
 
@@ -43,7 +45,8 @@ La plateforme s’appuie sur des processus métier orchestrés via BPMN pour gar
 - Prédiction de parcours
 - Analyse des données d’apprentissage
 - **Capture d’écran :**
-	- ![Path Predictor Health](../EDU/Service4_PathPredictor_health.PNG)
+	-<img width="268" height="165" alt="Service4_PathPredictor_health" src="https://github.com/user-attachments/assets/13d88177-58cb-4e64-96e1-68c02a8d322e" />
+
 
 ### 3. prepa-data
 - Orchestration et préparation des données
@@ -55,30 +58,41 @@ La plateforme s’appuie sur des processus métier orchestrés via BPMN pour gar
 - Coaching personnalisé
 - Suivi des cours, quiz et progression
 - **Captures d’écran :**
-	- ![Student Coach – Vue Cours](../EDU/Service7_StudentCoach_courses.PNG)
-	- ![Student Coach – Quizz](../EDU/Service7_StudentCoach_quizz.PNG)
-	- ![Student Coach – Dashboard](../EDU/Service7_StudentCoach_StudentDashboard.PNG)
-	- ![Student Coach – Vue Générale](../EDU/Service7_StudentCoach_courseOverview.PNG)
+	- ![Student Coach – Vue Cours](<img width="952" height="244" alt="Service7_StudentCoach_courses" src="https://github.com/user-attachments/assets/ced779c4-20a8-4f10-be11-05cb6db72d7c" />
+)
+	- ![Student Coach – Quizz](<img width="582" height="451" alt="Service7_StudentCoach_quizz" src="https://github.com/user-attachments/assets/444c11a2-705c-4ed5-b29a-27cdf0c21788" />
+)
+	- ![Student Coach – Dashboard](<img width="959" height="449" alt="Service7_StudentCoach_StudentDashboard" src="https://github.com/user-attachments/assets/057a1891-007c-4f95-bab4-61c752dd4808" />
+)
+	- ![Student Coach – Vue Générale](<img width="901" height="417" alt="Service7_StudentCoach_courseOverview" src="https://github.com/user-attachments/assets/ea152731-5113-41d6-b649-02391258bc79" />
+)
 
 ### 6. student-profiler
 - Analyse et gestion des profils étudiants
 - **Captures d’écran :**
-	- ![Student Profiler – Health](../EDU/Service3_StudentProfiler_health.PNG)
-	- ![Student Profiler – Routes](../EDU/Service3_StudentProfiler_routes.PNG)
+	- ![Student Profiler – Health](<img width="395" height="319" alt="Service3_StudentProfiler_health" src="https://github.com/user-attachments/assets/25178beb-7a32-48a4-a0bb-d6ea94d770ee" />
+)
+	- ![Student Profiler – Routes](<img width="949" height="442" alt="Service3_StudentProfiler_routes" src="https://github.com/user-attachments/assets/167d246d-bc3d-41b3-92fd-0de33e54231b" />
+)
 
 ### 7. teacher-console
 - Console de gestion pour enseignants
 - Alertes, suivi et dashboard
 - **Captures d’écran :**
-	- ![Teacher Console – Alerts](../EDU/Service6_TeacherConsole_Alerts.PNG)
-	- ![Teacher Console – Dashboard](../EDU/Service6_TeacherConsole_dashboard.PNG)
-	- ![Teacher Console – Étudiant](../EDU/Service6_TeacherConsole_Student.PNG)
+	- ![Teacher Console – Alerts](<img width="1096" height="219" alt="Service6_TeacherConsole_Alerts" src="https://github.com/user-attachments/assets/4d334bf7-0076-4bd7-99f4-518aa48dbe5a" />
+)
+	- ![Teacher Console – Dashboard](<img width="954" height="467" alt="Service6_TeacherConsole_dashboard" src="https://github.com/user-attachments/assets/2d50d660-91fb-4ae7-8018-29be68b095fa" />
+)
+	- ![Teacher Console – Étudiant](<img width="953" height="236" alt="Service6_TeacherConsole_Student" src="https://github.com/user-attachments/assets/3e3b9c6d-2af2-48d1-8c64-f729a5304714" />
+)
 
 ### 8. AirFlow (prépa-data)
 - Orchestration des workflows de données
 - **Captures d’écran :**
-	- ![AirFlow – Dashboard](../EDU/Service2_AirFlow_Dashboard.PNG)
-	- ![AirFlow – Login](../EDU/Service2_AirFlow_Login.PNG)
+	- ![AirFlow – Dashboard](<img width="954" height="486" alt="Service2_AirFlow_Dashboard" src="https://github.com/user-attachments/assets/c26fd90e-a62f-4372-b79a-923c37a0b8b1" />
+)
+	- ![AirFlow – Login](<img width="960" height="413" alt="Service2_AirFlow_Login" src="https://github.com/user-attachments/assets/9cf50af1-ca01-45fa-ac9e-744cdf7fdba9" />
+)
 
 ---
 
