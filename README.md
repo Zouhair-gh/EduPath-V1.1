@@ -100,5 +100,14 @@ Merci de consulter les guides de contribution dans chaque dossier de service.
 
 ---
 
-## Contact
+## Demo
+
+
+https://github.com/user-attachments/assets/944b5f33-fe74-402d-bd3d-4cfb6898dcf7
+
+
+
+https://github.com/user-attachments/assets/eb08715b-bce6-4160-9fab-22853455b80b
+
+
 Pour toute question ou suggestion, veuillez contacter l’équipe EduPath.
