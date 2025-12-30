@@ -1,0 +1,54 @@
+name: Rebuild Docker Images on Push to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push teacher-console-backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./teacher-console/backend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/teacher-console-backend:latest
+
+      - name: Build and push teacher-console-frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./teacher-console/frontend
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/teacher-console-frontend:latest
+
+      - name: Build and push student-coach-mobile image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./student-coach/mobile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/student-coach-mobile:latest
+
+      # Add more build steps for other microservices as needed
+
+    # Add a persistent retry step for failed builds
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        attempt: [1, 2, 3]
+
+    continue-on-error: true
