@@ -5,10 +5,12 @@ import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 import { randomUUID } from 'crypto';
 
+
 import dashboardRoutes from './routes/dashboard.routes.js';
 import studentsRoutes from './routes/students.routes.js';
 import alertsRoutes from './routes/alerts.routes.js';
 import exportRoutes from './routes/export.routes.js';
+import testsRoutes from './routes/tests.routes.js';
 
 const app = express();
 app.use(cors());
@@ -26,7 +28,11 @@ app.use(
   morgan(':date[iso] [:id] :method :url :status :response-time ms - :res[content-length]')
 );
 
+
 app.get('/', (req, res) => res.json({ status: 'ok', service: 'TeacherConsole Gateway' }));
+
+// Register new tests API
+app.use('/api/tests', testsRoutes);
 
 // Simple dev login endpoint to issue a JWT for testing
 app.post('/api/auth/login', (req, res) => {
@@ -42,6 +48,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/students', studentsRoutes);
 app.use('/api/alerts', alertsRoutes);
 app.use('/api/export', exportRoutes);
+app.use('/api/tests', testsRoutes);
 
 // Global error handler
 // eslint-disable-next-line no-unused-vars

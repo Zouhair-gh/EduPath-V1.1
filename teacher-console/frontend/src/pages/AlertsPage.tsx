@@ -54,12 +54,15 @@ export default function AlertsPage() {
       <Navbar />
       <div className="flex">
         <Sidebar />
-        <div className="flex-1 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-semibold">Alertes</h1>
-            <button className="px-3 py-1 border rounded" onClick={() => exportAlerts(courseId)}>Exporter CSV</button>
+        <main className="flex-1 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold text-blue-700 flex items-center gap-2">
+              <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636l-1.414 1.414A9 9 0 105.636 18.364l1.414-1.414" /></svg>
+              Alertes
+            </h1>
+            <button className="px-4 py-2 border rounded bg-blue-600 text-white hover:bg-blue-700 transition" onClick={() => exportAlerts(courseId)}>Exporter CSV</button>
           </div>
-          <div className="bg-white p-4 rounded shadow">
+          <section className="bg-white p-6 rounded shadow">
             <AlertsTable data={data} loading={isLoading || isPending}
               error={error ? (error as any).message : undefined}
               onResolve={onResolve}
@@ -67,8 +70,8 @@ export default function AlertsPage() {
               onAssign={onAssign}
               onComment={onComment}
             />
-          </div>
-        </div>
+          </section>
+        </main>
       </div>
     </div>
   );

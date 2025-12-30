@@ -84,7 +84,9 @@ class CourseDetailScreen extends ConsumerWidget {
                 enabled: !l.locked,
                 onTap: l.locked
                     ? () {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Leçon verrouillée. Veuillez réussir le quiz précédent ou contacter l'enseignant.')));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Leçon verrouillée. Veuillez réussir le quiz précédent ou contacter l'enseignant."))
+                        );
                       }
                     : () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) => LessonDetailScreen(lesson: l, courseId: courseId)));
@@ -303,69 +305,72 @@ class _QuizContentState extends ConsumerState<QuizContent> {
     return quiz.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => Center(child: Text('Erreur: $e')),
-      data: (q) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (widget.showTitle) ...[
-            Text(
-              'Quiz ${q.title}',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-          ],
-          Text(q.description),
-          const SizedBox(height: 12),
-          ...q.questions.map((question) => Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(question.prompt, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  ...List.generate(question.options.length, (idx) => RadioListTile<int>(
-                        value: idx,
-                        groupValue: _answers[question.id],
-                        title: Text(question.options[idx]),
-                        onChanged: (v) {
-                          setState(() {
-                            _answers[question.id] = v!;
-                          });
-                        },
-                      )),
-                ],
+      data: (q) => SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (widget.showTitle) ...[
+              Text(
+                'Quiz ${q.title}',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-            ),
-          )),
-          const SizedBox(height: 12),
-          ElevatedButton.icon(
-            onPressed: () async {
-              try {
-                final result = await ref.read(quizSubmitController((quizId: widget.quizId, answers: _answers)).future);
-                final percent = result['percent'] as int? ?? 0;
-                final passed = result['passed'] as bool? ?? false;
-                final error = result['error'] as String?;
-                if (error != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: ${result['message'] ?? error}')));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Score: $percent%  ${passed ? 'Réussi' : 'Échoué'}')));
-                }
-                // Refresh lessons to unlock next if passed
-                if (widget.courseId != null) {
+              const SizedBox(height: 8),
+            ],
+            Text(q.description),
+            const SizedBox(height: 12),
+            ...q.questions.map((question) => Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(question.prompt, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    ...List.generate(question.options.length, (idx) => RadioListTile<int>(
+                          value: idx,
+                          groupValue: _answers[question.id],
+                          title: Text(question.options[idx]),
+                          onChanged: (v) {
+                            setState(() {
+                              _answers[question.id] = v!;
+                            });
+                          },
+                        )),
+                  ],
+                ),
+              ),
+            )),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () async {
+                try {
+                  final result = await ref.read(quizSubmitController((quizId: widget.quizId, answers: _answers)).future);
+                  final percent = result['percent'] as int? ?? 0;
+                  final passed = result['passed'] as bool? ?? false;
+                  final error = result['error'] as String?;
+                  if (error != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur: ${result['message'] ?? error}')));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Score: $percent%  ${passed ? 'Réussi' : 'Échoué'}')));
+                  }
+                  // Refresh lessons to unlock next if passed
+                  if (widget.courseId != null) {
+                    // ignore: unused_result
+                    ref.refresh(lessonsProvider(widget.courseId!));
+                  }
+                  // Refresh quiz detail view (optional)
                   // ignore: unused_result
-                  ref.refresh(lessonsProvider(widget.courseId!));
+                  ref.refresh(quizDetailProvider(widget.quizId));
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur soumission: $e')));
                 }
-                // Refresh quiz detail view (optional)
-                // ignore: unused_result
-                ref.refresh(quizDetailProvider(widget.quizId));
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erreur soumission: $e')));
-              }
-            },
-            icon: const Icon(Icons.send),
-            label: const Text('Soumettre'),
-          ),
-        ],
+              },
+              icon: const Icon(Icons.send),
+              label: const Text('Soumettre'),
+            ),
+          ],
+        ),
       ),
     );
   }

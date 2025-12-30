@@ -1,3 +1,24 @@
+// Fetch recent tests for sidebar section
+export async function listRecentTests(limit = 10) {
+  await ensureSchema();
+  // Hardcoded student info for demo
+  const studentInfo = {
+    'student@example.com': { name: 'Morad Marouan', email: 'student@example.com' },
+    'student2@example.com': { name: 'Amine Maaroufi', email: 'student2@example.com' },
+    '100': { name: 'Morad Marouan', email: 'student@example.com' },
+    '103': { name: 'Amine Maaroufi', email: 'student2@example.com' },
+  };
+  return await withPg(async (client) => {
+    const sql = `SELECT id, student_id, course_id, author, content, created_at FROM student_notes ORDER BY created_at DESC LIMIT $1`;
+    const { rows } = await client.query(sql, [limit]);
+    // Attach name/email if known
+    return rows.map(row => ({
+      ...row,
+      name: studentInfo[row.student_id]?.name || row.student_id,
+      email: studentInfo[row.student_id]?.email || row.student_id,
+    }));
+  });
+}
 import axios from 'axios';
 import { Client as PgClient } from 'pg';
 

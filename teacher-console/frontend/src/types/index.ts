@@ -1,3 +1,13 @@
+export interface RecentTest {
+  id: number;
+  student_id: string;
+  course_id: number;
+  author: string;
+  content: string;
+  created_at: string;
+  name?: string;
+  email?: string;
+}
 export interface Alert {
   id: number;
   studentId: number;
