@@ -21,28 +21,50 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push teacher-console-backend image
+
+      - name: Build and push student-coach-backend image
         uses: docker/build-push-action@v5
         with:
-          context: ./teacher-console/backend
+          context: ./student-coach/backend
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/teacher-console-backend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/student-coach-backend:latest
 
-      - name: Build and push teacher-console-frontend image
+      - name: Build and push student-profiler image
         uses: docker/build-push-action@v5
         with:
-          context: ./teacher-console/frontend
+          context: ./student-profiler
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/teacher-console-frontend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/student-profiler:latest
 
-      - name: Build and push student-coach-mobile image
+      - name: Build and push reco-builder image
         uses: docker/build-push-action@v5
         with:
-          context: ./student-coach/mobile
+          context: ./reco-builder
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/student-coach-mobile:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/reco-builder:latest
 
-      # Add more build steps for other microservices as needed
+      - name: Build and push prepa-data image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./prepa-data
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/prepa-data:latest
+
+      - name: Build and push LMSConnector image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./LMSConnector
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lmsconnector:latest
+
+      - name: Build and push path-predictor image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./path-predictor
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/path-predictor:latest
+
+      # Only build images for services with Dockerfiles
 
     # Add a persistent retry step for failed builds
     strategy:
